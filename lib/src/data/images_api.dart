@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 class ImagesApi {
-  Future<List<String>> getImages(String username) async {
+  Future<List<String>> getImages(String username, int _page) async {
     final Uri uri = Uri(
       scheme: 'https',
       host: 'api.unsplash.com',
@@ -14,10 +14,13 @@ class ImagesApi {
       ],
       queryParameters: <String, String>{
         'username': 'hans_isaacson',
-        'client_id': '4SzXVATPhpl4SaGjnz3qQcYjXnKqsjILsN_TznROKrY',
+        'client_id': 'zv3SvfPMt52mH9vESdKdQK2YMP4b-QsAVSB838MHBZo',
+        'page': '$_page',
+        'count': '4',
+        'orientation': 'landscape',
       },
     );
-    print(uri);
+
     final Response response = await get(uri);
     if (response.statusCode != 200) {
       throw StateError('Error fetching the images.');
@@ -27,10 +30,4 @@ class ImagesApi {
         .map((dynamic image) => image['urls']['small'] as String)
         .toList();
   }
-}
-
-Future<void> main() async {
-  final ImagesApi api = ImagesApi();
-  var photos = await api.getImages('hans_isaacson');
-  print(photos);
 }

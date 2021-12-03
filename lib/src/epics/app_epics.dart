@@ -16,7 +16,7 @@ class AppEpics {
   Stream<dynamic> getImages(Stream<GetImages> actions, EpicStore<AppState> store) {
     return actions //
         .flatMap((GetImages action) => Stream<void>.value(null)
-            .asyncMap((_) => _api.getImages(store.state.username))
+            .asyncMap((_) => _api.getImages(store.state.username, store.state.page))
             .map<Object>((List<String> images) => GetImagesSuccessful(images))
             .onErrorReturnWith((error, stackTrace) => GetImagesError(error))
             .doOnData(action.result));

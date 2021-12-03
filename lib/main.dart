@@ -1,66 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_app/src/data/images_api.dart';
+import 'package:redux_app/src/epics/app_epics.dart';
+import 'package:redux_app/src/models/app_state.dart';
+import 'package:redux_app/src/presentation/home_page.dart';
+import 'package:redux_app/src/reducer/reducer.dart';
+import 'package:redux_epics/redux_epics.dart';
 
 void main() {
-  runApp(const MyApp());
+  final ImagesApi moviesApi = ImagesApi();
+  final AppEpics epics = AppEpics(moviesApi);
+
+  final Store<AppState> store = Store<AppState>(
+    reducer,
+    initialState: AppState(),
+    middleware: <Middleware<AppState>>[
+      (Store<AppState> store, dynamic action, NextDispatcher next) {
+        next(action);
+      },
+      EpicMiddleware<AppState>(epics.epics),
+    ],
+  );
+  //store.dispatch(const GetMovies(1)); emitem o actiune
+  runApp(MyApp(store: store));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.store}) : super(key: key);
+  final Store<AppState> store;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    return StoreProvider(
+      store: store,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.dark(),
+        home: const MyHomePage(),
       ),
     );
   }

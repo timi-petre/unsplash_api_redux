@@ -21,6 +21,7 @@ AppState _getImagesSuccessful(AppState state, GetImagesSuccessful action) {
   ];
   return state.copyWith(
     images: images,
+    page: state.page + 1,
     isLoading: false,
   );
 }
