@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:redux_app/src/actions/get_images.dart';
-import 'package:redux_app/src/container/images_container.dart';
-import 'package:redux_app/src/container/is_loading_container.dart';
-import 'package:redux_app/src/container/username_container.dart';
-import 'package:redux_app/src/models/app_state.dart';
+
+import '/src/actions/get_images.dart';
+import '/src/container/images_container.dart';
+import '/src/container/is_loading_container.dart';
+import '/src/container/username_container.dart';
+import '/src/models/app_state.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -41,11 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if (action is GetImagesError) {
       showDialog<void>(
         context: context,
-        builder: (context) {
+        builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Error getting images'),
             content: Text('${action.error}'),
-            actions: [
+            actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: const Text('Ok'),
@@ -57,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void page(action) {}
+  void page(dynamic action) {}
 
   @override
   void dispose() {
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              children: [
+              children: <Widget>[
                 const CircleAvatar(
                   backgroundColor: Colors.amber,
                   radius: 50,
@@ -136,7 +137,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     shrinkWrap: true,
                     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
-                      childAspectRatio: 3 / 3,
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
                     ),

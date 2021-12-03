@@ -25,7 +25,7 @@ class ImagesApi {
     if (response.statusCode != 200) {
       throw StateError('Error fetching the images.');
     }
-    final List<dynamic> body = jsonDecode(response.body);
+    final List<dynamic> body = jsonDecode(response.body) as List<dynamic>;
     return body //
         .map((dynamic image) => image['urls']['small'] as String)
         .toList();

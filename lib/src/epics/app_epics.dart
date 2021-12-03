@@ -1,15 +1,16 @@
-import 'package:redux_app/src/actions/get_images.dart';
-import 'package:redux_app/src/data/images_api.dart';
-import 'package:redux_app/src/models/app_state.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '/src/actions/get_images.dart';
+import '/src/data/images_api.dart';
+import '/src/models/app_state.dart';
 
 class AppEpics {
   AppEpics(this._api);
 
   final ImagesApi _api;
 
-  Epic<AppState> get epics => combineEpics<AppState>([
+  Epic<AppState> get epics => combineEpics<AppState>(<Epic<AppState>>[
         TypedEpic<AppState, GetImages>(getImages),
       ]);
 
@@ -18,7 +19,7 @@ class AppEpics {
         .flatMap((GetImages action) => Stream<void>.value(null)
             .asyncMap((_) => _api.getImages(store.state.username, store.state.page))
             .map<Object>((List<String> images) => GetImagesSuccessful(images))
-            .onErrorReturnWith((error, stackTrace) => GetImagesError(error))
+            .onErrorReturnWith((Object error, StackTrace stackTrace) => GetImagesError(error))
             .doOnData(action.result));
   }
 }

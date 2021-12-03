@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:redux_app/src/data/images_api.dart';
-import 'package:redux_app/src/epics/app_epics.dart';
-import 'package:redux_app/src/models/app_state.dart';
-import 'package:redux_app/src/presentation/home_page.dart';
-import 'package:redux_app/src/reducer/reducer.dart';
 import 'package:redux_epics/redux_epics.dart';
+
+import 'src/data/images_api.dart';
+import 'src/epics/app_epics.dart';
+import 'src/models/app_state.dart';
+import 'src/presentation/home_page.dart';
+import 'src/reducer/reducer.dart';
 
 void main() {
   final ImagesApi moviesApi = ImagesApi();
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider(
+    return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
