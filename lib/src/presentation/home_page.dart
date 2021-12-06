@@ -27,8 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void stateApp() {
-    final Store<AppState> store =
-        StoreProvider.of<AppState>(context, listen: false);
+    final Store<AppState> store = StoreProvider.of<AppState>(context, listen: false);
 
     store.dispatch(GetImages(onResult, username));
     _controller.addListener(_onScroll);
@@ -40,8 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final Store<AppState> store = StoreProvider.of<AppState>(context);
 
-    if (!store.state.isLoading &&
-        currentPosition > maxPosition - MediaQuery.of(context).size.height) {
+    if (!store.state.isLoading && currentPosition > maxPosition - MediaQuery.of(context).size.height) {
       store.dispatch(GetImages(onResult, username));
     }
   }
@@ -161,8 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         controller: _controller,
                         padding: const EdgeInsets.all(16),
                         shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 200,
                           crossAxisSpacing: 20,
                           mainAxisSpacing: 20,

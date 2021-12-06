@@ -21,6 +21,5 @@ class UserState {
   }
 
   @override
-  String toString() =>
-      'UserState(text: $text, errorMailText: $errorMailText, errorPasswordText: $errorPasswordText)';
+  String toString() => 'UserState(text: $text, errorMailText: $errorMailText, errorPasswordText: $errorPasswordText)';
 }
