@@ -18,16 +18,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final ScrollController _controller = ScrollController();
+  int index = 0;
   @override
   void initState() {
     super.initState();
     stateApp();
-
-    //shimmer effect
   }
 
   void stateApp() {
-    final Store<AppState> store = StoreProvider.of<AppState>(context, listen: false);
+    final Store<AppState> store =
+        StoreProvider.of<AppState>(context, listen: false);
 
     store.dispatch(GetImages(onResult, username));
     _controller.addListener(_onScroll);
@@ -39,7 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final Store<AppState> store = StoreProvider.of<AppState>(context);
 
-    if (!store.state.isLoading && currentPosition > maxPosition - MediaQuery.of(context).size.height) {
+    if (!store.state.isLoading &&
+        currentPosition > maxPosition - MediaQuery.of(context).size.height) {
       store.dispatch(GetImages(onResult, username));
     }
   }
@@ -96,13 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.person),
-          onPressed: () {
-            // ignore: always_specify_types
-            Navigator.popUntil(context, (Route route) => route.isFirst);
-          },
-        ),
         title: const Text('Images App'),
       ),
       body: RefreshIndicator(
@@ -154,27 +148,34 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 5.0,
                     ),
                     Expanded(
-                      child: GridView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        controller: _controller,
-                        padding: const EdgeInsets.all(16),
-                        shrinkWrap: true,
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                        ),
-                        itemCount: images.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              images[index],
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          );
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/image',
+                              arguments: images[index]);
                         },
+                        child: GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          controller: _controller,
+                          padding: const EdgeInsets.all(16),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                          ),
+                          itemCount: images.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                images[index],
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                     IsLoadingContainer(

@@ -3,8 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 
-import '/src/presentation/login_page.dart';
-import '/src/presentation/users_page.dart';
 import 'src/data/images_api.dart';
 import 'src/epics/app_epics.dart';
 import 'src/models/app_state.dart';
@@ -40,11 +38,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark(),
-        initialRoute: '/photos',
+        initialRoute: '/',
         routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) => const LoginPage(),
-          '/users': (BuildContext context) => const UsersPage(),
-          '/photos': (BuildContext context) => const MyHomePage(),
+          '/': (BuildContext context) => const MyHomePage(),
         },
       ),
     );

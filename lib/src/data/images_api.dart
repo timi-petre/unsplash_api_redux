@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 class ImagesApi {
-  Future<List<String>> getImages(String username, int page, String avatar) async {
+  Future<List<String>> getImages(
+      String username, int page, String avatar) async {
     final Uri uri = Uri(
       scheme: 'https',
       host: 'api.unsplash.com',
