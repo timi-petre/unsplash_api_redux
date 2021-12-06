@@ -17,8 +17,8 @@ AppState _getImages(AppState state, GetImages action) {
 
 AppState _getImagesSuccessful(AppState state, GetImagesSuccessful action) {
   final List<String> images = <String>[
-    ...action.images,
     ...state.images,
+    ...action.images,
   ];
   return state.copyWith(
     images: images,

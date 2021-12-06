@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 class ImagesApi {
-  Future<List<String>> getImages(String username, int _page) async {
+  Future<List<String>> getImages(
+      String username, int page, String avatar) async {
     final Uri uri = Uri(
       scheme: 'https',
       host: 'api.unsplash.com',
@@ -13,11 +14,11 @@ class ImagesApi {
         'photos',
       ],
       queryParameters: <String, String>{
-        'username': 'hans_isaacson',
-        'client_id': 'zv3SvfPMt52mH9vESdKdQK2YMP4b-QsAVSB838MHBZo',
-        'page': '$_page',
-        'count': '4',
-        'orientation': 'landscape',
+        'client_id': '4SzXVATPhpl4SaGjnz3qQcYjXnKqsjILsN_TznROKrY',
+        'page': '$page',
+        'per_page': '6',
+        'limit': '10',
+        'username': username,
       },
     );
 

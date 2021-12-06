@@ -3,6 +3,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 
+import '/src/presentation/login_page.dart';
+import '/src/presentation/users_page.dart';
 import 'src/data/images_api.dart';
 import 'src/epics/app_epics.dart';
 import 'src/models/app_state.dart';
@@ -10,8 +12,8 @@ import 'src/presentation/home_page.dart';
 import 'src/reducer/reducer.dart';
 
 void main() {
-  final ImagesApi moviesApi = ImagesApi();
-  final AppEpics epics = AppEpics(moviesApi);
+  final ImagesApi imagesApi = ImagesApi();
+  final AppEpics epics = AppEpics(imagesApi);
 
   final Store<AppState> store = Store<AppState>(
     reducer,
@@ -23,7 +25,7 @@ void main() {
       EpicMiddleware<AppState>(epics.epics),
     ],
   );
-  //store.dispatch(const GetMovies(1)); emitem o actiune
+
   runApp(MyApp(store: store));
 }
 
@@ -38,7 +40,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark(),
-        home: const MyHomePage(),
+        initialRoute: '/photos',
+        routes: <String, WidgetBuilder>{
+          '/': (BuildContext context) => const LoginPage(),
+          '/users': (BuildContext context) => const UsersPage(),
+          '/photos': (BuildContext context) => const MyHomePage(),
+        },
       ),
     );
   }

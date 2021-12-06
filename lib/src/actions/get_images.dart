@@ -1,8 +1,8 @@
 class GetImages {
-  const GetImages(this.result, this.page);
+  const GetImages(this.result, this.username);
 
   final void Function(dynamic action) result;
-  final void Function(dynamic action) page;
+  final void Function(dynamic action) username;
 }
 
 class GetImagesSuccessful {
