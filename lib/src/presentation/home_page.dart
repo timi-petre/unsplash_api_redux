@@ -18,7 +18,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final ScrollController _controller = ScrollController();
-  int index = 0;
   @override
   void initState() {
     super.initState();
@@ -91,104 +90,106 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  double expand = 160.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Images App'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          stateApp();
-        },
-        child: SafeArea(
-          child: ImagesContainer(
-            builder: (BuildContext context, List<String> images) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: <Widget>[
-                    const Avatar(),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    const UserName(),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 1,
-                        right: 1,
-                        bottom: 5,
+      body: SafeArea(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          controller: _controller,
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: expand,
+              pinned: true,
+              backgroundColor: Colors.grey[850],
+              flexibleSpace: const FlexibleSpaceBar(
+                collapseMode: CollapseMode.none,
+                titlePadding: EdgeInsets.all(16),
+                title: UserName(),
+                background: Avatar(),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[850],
+                    border: Border.all(width: 5, color: Colors.white),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Photos',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
                       ),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        width: MediaQuery.of(context).size.width,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.grey[850],
-                          border: Border.all(width: 5, color: Colors.white),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Photos',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20,
+              ),
+            ),
+            ImagesContainer(builder: (BuildContext context, List<String> images) {
+              return Expanded(
+                child: SliverPadding(
+                  padding: const EdgeInsets.all(16.0),
+                  sliver: SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return Column(
+                          children: <Widget>[
+                            ImagesContainer(
+                              builder: (BuildContext context, List<String> images) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    images[index],
+                                    fit: BoxFit.cover,
+                                    height: 150,
+                                    cacheHeight: 300,
+                                    width: double.infinity,
+                                  ),
+                                );
+                              },
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5.0,
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/image', arguments: images[index]);
-                        },
-                        child: GridView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          controller: _controller,
-                          padding: const EdgeInsets.all(16),
-                          shrinkWrap: true,
-                          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                          ),
-                          itemCount: images.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                images[index],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    IsLoadingContainer(
-                      builder: (BuildContext context, bool isLoading) {
-                        if (!isLoading && images.isNotEmpty) {
-                          return const SizedBox.shrink();
-                        }
-                        return const CircularProgressIndicator(
-                          color: Colors.amber,
+                          ],
                         );
                       },
+                      childCount: images.length,
                     ),
-                  ],
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                    ),
+                  ),
                 ),
               );
-            },
-          ),
+            }),
+            SliverFillRemaining(
+              child: Center(
+                child: IsLoadingContainer(
+                  builder: (BuildContext context, bool isLoading) {
+                    if (!isLoading) {
+                      return const SizedBox.shrink();
+                    }
+                    return const CircularProgressIndicator(
+                      color: Colors.amber,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -203,7 +204,8 @@ class UserName extends StatelessWidget {
     return UserContainer(
       builder: (BuildContext context, String username) {
         return Text(
-          username,
+          username.replaceAll(
+              username, (username.substring(0, 1).toUpperCase() + username.substring(1)).replaceRange(4, 5, ' ')),
           style: const TextStyle(fontSize: 20),
         );
       },
@@ -216,21 +218,110 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundColor: Colors.amber,
-      radius: 50,
-      child: AvatarContainer(
-        builder: (BuildContext context, String avatar) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: Image.network(
-              avatar,
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
-          );
-        },
-      ),
+    return AvatarContainer(
+      builder: (BuildContext context, String avatar) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            avatar,
+            fit: BoxFit.cover,
+          ),
+        );
+      },
     );
   }
 }
+// appBar: AppBar(
+//   title: const Text('Images App'),
+// ),
+// RefreshIndicator(
+//         onRefresh: () async {
+//           stateApp();
+//         },
+//         child: SafeArea(
+//           child: ImagesContainer(
+//             builder: (BuildContext context, List<String> images) {
+//               return Column(
+//                 children: <Widget>[
+//                   Padding(
+//                     padding: const EdgeInsets.all(8.0),
+//                     child: Column(children: <Widget>[
+//                       const Avatar(),
+//                       const SizedBox(
+//                         height: 16.0,
+//                       ),
+//                       const UserName(),
+//                       const SizedBox(
+//                         height: 20.0,
+//                       ),
+//                       Padding(
+//                         padding: const EdgeInsets.only(
+//                           left: 1,
+//                           right: 1,
+//                           bottom: 5,
+//                         ),
+// child: AnimatedContainer(
+//   duration: const Duration(milliseconds: 500),
+//   width: MediaQuery.of(context).size.width,
+//   height: 40,
+//   decoration: BoxDecoration(
+//     borderRadius: BorderRadius.circular(20),
+//     color: Colors.grey[850],
+//     border: Border.all(width: 5, color: Colors.white),
+//   ),
+//   child: const Center(
+//     child: Text(
+//       'Photos',
+//       style: TextStyle(
+//         color: Colors.white,
+//         fontSize: 17,
+//       ),
+//     ),
+//   ),
+// ),
+//                       ),
+//                       const SizedBox(
+//                         height: 5.0,
+//                       ),
+//                     ]),
+//                   ),
+//                   Expanded(
+//                     child: GridView.builder(
+//                       physics: const BouncingScrollPhysics(),
+//                       controller: _controller,
+//                       padding: const EdgeInsets.all(16),
+//                       shrinkWrap: true,
+//                       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+//                         maxCrossAxisExtent: 200,
+//                         crossAxisSpacing: 20,
+//                         mainAxisSpacing: 20,
+//                       ),
+//                       itemCount: images.length,
+//                       itemBuilder: (BuildContext context, int index) {
+//                         return ClipRRect(
+//                           borderRadius: BorderRadius.circular(15),
+//                           child: Image.network(
+//                             images[index],
+//                             fit: BoxFit.cover,
+//                             width: double.infinity,
+//                           ),
+//                         );
+//                       },
+//                     ),
+//                   ),
+//                   IsLoadingContainer(
+//                     builder: (BuildContext context, bool isLoading) {
+//                       if (!isLoading && images.isNotEmpty) {
+//                         return const SizedBox.shrink();
+//                       }
+//                       return const CircularProgressIndicator(
+//                         color: Colors.amber,
+//                       );
+//                     },
+//                   ),
+//                 ],
+//               );
+//             },
+//           ),
+//         ),
+//       ),
