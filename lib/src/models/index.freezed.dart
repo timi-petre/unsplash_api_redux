@@ -230,7 +230,7 @@ Photo _$PhotoFromJson(Map<String, dynamic> json) {
 class _$PhotoTearOff {
   const _$PhotoTearOff();
 
-  Photo$ call({@JsonKey(name: 'small') required String image, required String description}) {
+  Photo$ call({required String image, String? description}) {
     return Photo$(
       image: image,
       description: description,
@@ -247,9 +247,8 @@ const $Photo = _$PhotoTearOff();
 
 /// @nodoc
 mixin _$Photo {
-  @JsonKey(name: 'small')
   String get image => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -259,7 +258,7 @@ mixin _$Photo {
 /// @nodoc
 abstract class $PhotoCopyWith<$Res> {
   factory $PhotoCopyWith(Photo value, $Res Function(Photo) then) = _$PhotoCopyWithImpl<$Res>;
-  $Res call({@JsonKey(name: 'small') String image, String description});
+  $Res call({String image, String? description});
 }
 
 /// @nodoc
@@ -283,7 +282,7 @@ class _$PhotoCopyWithImpl<$Res> implements $PhotoCopyWith<$Res> {
       description: description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -292,7 +291,7 @@ class _$PhotoCopyWithImpl<$Res> implements $PhotoCopyWith<$Res> {
 abstract class $Photo$CopyWith<$Res> implements $PhotoCopyWith<$Res> {
   factory $Photo$CopyWith(Photo$ value, $Res Function(Photo$) then) = _$Photo$CopyWithImpl<$Res>;
   @override
-  $Res call({@JsonKey(name: 'small') String image, String description});
+  $Res call({String image, String? description});
 }
 
 /// @nodoc
@@ -315,7 +314,7 @@ class _$Photo$CopyWithImpl<$Res> extends _$PhotoCopyWithImpl<$Res> implements $P
       description: description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -323,15 +322,14 @@ class _$Photo$CopyWithImpl<$Res> extends _$PhotoCopyWithImpl<$Res> implements $P
 /// @nodoc
 @JsonSerializable()
 class _$Photo$ implements Photo$ {
-  _$Photo$({@JsonKey(name: 'small') required this.image, required this.description});
+  _$Photo$({required this.image, this.description});
 
   factory _$Photo$.fromJson(Map<String, dynamic> json) => _$$Photo$FromJson(json);
 
   @override
-  @JsonKey(name: 'small')
   final String image;
   @override
-  final String description;
+  final String? description;
 
   @override
   String toString() {
@@ -362,15 +360,14 @@ class _$Photo$ implements Photo$ {
 }
 
 abstract class Photo$ implements Photo {
-  factory Photo$({@JsonKey(name: 'small') required String image, required String description}) = _$Photo$;
+  factory Photo$({required String image, String? description}) = _$Photo$;
 
   factory Photo$.fromJson(Map<String, dynamic> json) = _$Photo$.fromJson;
 
   @override
-  @JsonKey(name: 'small')
   String get image;
   @override
-  String get description;
+  String? get description;
   @override
   @JsonKey(ignore: true)
   $Photo$CopyWith<Photo$> get copyWith => throw _privateConstructorUsedError;

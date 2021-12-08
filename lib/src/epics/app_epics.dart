@@ -14,7 +14,7 @@ class AppEpics {
         TypedEpic<AppState, GetImagesStart>(getImages),
       ]);
 
-  Stream<AppAction> getImages(Stream<GetImagesStart> actions, EpicStore<AppState> store) {
+  Stream<GetImages> getImages(Stream<GetImagesStart> actions, EpicStore<AppState> store) {
     return actions //
         .flatMap((GetImagesStart action) => Stream<void>.value(null)
             .asyncMap((_) => _api.getImages(store.state.page, store.state.avatar))

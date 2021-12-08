@@ -31,7 +31,7 @@ class ImagesApi {
     return body //
         .map((dynamic image) => Photo(
               image: '${image['urls']['small']}',
-              description: '${image['description'] ?? 'No description'}',
+              description: '${image['description']}',
             )) //
         .toList();
   }

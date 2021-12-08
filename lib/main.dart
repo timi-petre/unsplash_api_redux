@@ -36,7 +36,6 @@ class MyApp extends StatelessWidget {
     return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         theme: ThemeData.dark(),
         initialRoute: '/',
         routes: <String, WidgetBuilder>{

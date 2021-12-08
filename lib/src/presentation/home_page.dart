@@ -92,20 +92,23 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SliverToBoxAdapter(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey[850],
-                  border: Border.all(width: 5, color: Colors.white),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Photos',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8, right: 8),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[850],
+                    border: Border.all(width: 5, color: Colors.white),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Photos',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
                     ),
                   ),
                 ),
@@ -141,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   const SizedBox(
                                     height: 4,
                                   ),
-                                  Text(image.description),
+                                  Text(image.description ?? 'No description'),
                                 ],
                               );
                             },
