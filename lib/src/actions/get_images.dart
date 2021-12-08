@@ -1,18 +1,14 @@
-class GetImages {
-  const GetImages(this.result, this.username);
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final void Function(dynamic action) result;
-  final void Function(dynamic action) username;
-}
+import '/src/models/index.dart';
 
-class GetImagesSuccessful {
-  const GetImagesSuccessful(this.images);
+part 'get_images.freezed.dart';
 
-  final List<String> images;
-}
+@freezed
+class GetImages with _$GetImages {
+  const factory GetImages(void Function(dynamic action) result) = GetImagesStart;
 
-class GetImagesError {
-  const GetImagesError(this.error);
+  const factory GetImages.successful(List<Photo> images) = GetImagesSuccessful;
 
-  final Object error;
+  const factory GetImages.error(Object error, StackTrace stackTrace) = GetImagesError;
 }

@@ -7,7 +7,7 @@ import '/src/container/avatar_container.dart';
 import '/src/container/images_container.dart';
 import '/src/container/is_loading_container.dart';
 import '/src/container/username_container.dart';
-import '/src/models/app_state.dart';
+import '/src/models/index.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -18,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final ScrollController _controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -27,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void stateApp() {
     final Store<AppState> store = StoreProvider.of<AppState>(context, listen: false);
 
-    store.dispatch(GetImages(onResult, username));
+    store.dispatch(GetImages(onResult));
     _controller.addListener(_onScroll);
   }
 
@@ -38,32 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
     final Store<AppState> store = StoreProvider.of<AppState>(context);
 
     if (!store.state.isLoading && currentPosition > maxPosition - MediaQuery.of(context).size.height) {
-      store.dispatch(GetImages(onResult, username));
+      store.dispatch(GetImages(onResult));
     }
   }
 
   void onResult(dynamic action) {
-    if (action is GetImagesError) {
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error getting images'),
-            content: Text('${action.error}'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-    return;
-  }
-
-  void username(dynamic action) {
     if (action is GetImagesError) {
       showDialog<void>(
         context: context,
@@ -90,7 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  double expand = 160.0;
+  double expand = 250.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,34 +81,31 @@ class _MyHomePageState extends State<MyHomePage> {
           controller: _controller,
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: expand,
               pinned: true,
+              expandedHeight: expand,
               backgroundColor: Colors.grey[850],
               flexibleSpace: const FlexibleSpaceBar(
-                collapseMode: CollapseMode.none,
-                titlePadding: EdgeInsets.all(16),
+                collapseMode: CollapseMode.pin,
+                centerTitle: true,
                 title: UserName(),
                 background: Avatar(),
               ),
             ),
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey[850],
-                    border: Border.all(width: 5, color: Colors.white),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Photos',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                      ),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey[850],
+                  border: Border.all(width: 5, color: Colors.white),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Photos',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
                     ),
                   ),
                 ),
@@ -135,42 +113,47 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: 20,
+                height: 10,
               ),
             ),
-            ImagesContainer(builder: (BuildContext context, List<String> images) {
-              return Expanded(
-                child: SliverPadding(
-                  padding: const EdgeInsets.all(16.0),
-                  sliver: SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return Column(
-                          children: <Widget>[
-                            ImagesContainer(
-                              builder: (BuildContext context, List<String> images) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image.network(
-                                    images[index],
-                                    fit: BoxFit.cover,
-                                    height: 150,
-                                    cacheHeight: 300,
-                                    width: double.infinity,
+            ImagesContainer(builder: (BuildContext context, List<Photo> images) {
+              return SliverPadding(
+                padding: const EdgeInsets.all(16.0),
+                sliver: SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Column(
+                        children: <Widget>[
+                          ImagesContainer(
+                            builder: (BuildContext context, List<Photo> images) {
+                              return Column(
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image.network(
+                                      images[index].image,
+                                      fit: BoxFit.cover,
+                                      height: 145,
+                                      width: double.infinity,
+                                    ),
                                   ),
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                      childCount: images.length,
-                    ),
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                    ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(images[index].description),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                    childCount: images.length,
+                  ),
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
                   ),
                 ),
               );
@@ -220,11 +203,14 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AvatarContainer(
       builder: (BuildContext context, String avatar) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.network(
-            avatar,
-            fit: BoxFit.cover,
+        return CircleAvatar(
+          backgroundColor: Colors.transparent,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Image.network(
+              avatar,
+              fit: BoxFit.cover,
+            ),
           ),
         );
       },

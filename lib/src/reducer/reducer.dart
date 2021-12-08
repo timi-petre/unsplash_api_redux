@@ -1,22 +1,22 @@
 import 'package:redux/redux.dart';
 
 import '/src/actions/get_images.dart';
-import '/src/models/app_state.dart';
+import '/src/models/index.dart';
 
 Reducer<AppState> reducer = combineReducers(<Reducer<AppState>>[
-  TypedReducer<AppState, GetImages>(_getImages),
+  TypedReducer<AppState, GetImagesStart>(_getImages),
   TypedReducer<AppState, GetImagesSuccessful>(_getImagesSuccessful),
   TypedReducer<AppState, GetImagesError>(_getImagesError),
 ]);
 
-AppState _getImages(AppState state, GetImages action) {
+AppState _getImages(AppState state, GetImagesStart action) {
   return state.copyWith(
     isLoading: true,
   );
 }
 
 AppState _getImagesSuccessful(AppState state, GetImagesSuccessful action) {
-  final List<String> images = <String>[
+  final List<Photo> images = <Photo>[
     ...state.images,
     ...action.images,
   ];
