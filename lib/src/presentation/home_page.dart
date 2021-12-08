@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '/src/actions/get_images.dart';
+import '/src/actions/index.dart';
 import '/src/container/avatar_container.dart';
 import '/src/container/images_container.dart';
 import '/src/container/is_loading_container.dart';
@@ -122,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
+                      final Photo image = images[index];
                       return Column(
                         children: <Widget>[
                           ImagesContainer(
@@ -131,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
                                     child: Image.network(
-                                      images[index].image,
+                                      image.image,
                                       fit: BoxFit.cover,
                                       height: 145,
                                       width: double.infinity,
@@ -140,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   const SizedBox(
                                     height: 4,
                                   ),
-                                  Text(images[index].description),
+                                  Text(image.description),
                                 ],
                               );
                             },

@@ -1,11 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '/src/models/index.dart';
-
-part 'get_images.freezed.dart';
+part of actions;
 
 @freezed
-class GetImages with _$GetImages {
+class GetImages with _$GetImages implements AppAction {
   const factory GetImages(void Function(dynamic action) result) = GetImagesStart;
 
   const factory GetImages.successful(List<Photo> images) = GetImagesSuccessful;

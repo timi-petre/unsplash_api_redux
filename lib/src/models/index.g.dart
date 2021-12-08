@@ -7,11 +7,11 @@ part of models;
 // **************************************************************************
 
 _$Photo$ _$$Photo$FromJson(Map<String, dynamic> json) => _$Photo$(
-      image: json['image'] as String,
+      image: json['small'] as String,
       description: json['description'] as String,
     );
 
 Map<String, dynamic> _$$Photo$ToJson(_$Photo$ instance) => <String, dynamic>{
-      'image': instance.image,
+      'small': instance.image,
       'description': instance.description,
     };

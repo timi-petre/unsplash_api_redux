@@ -1,6 +1,6 @@
 import 'package:redux/redux.dart';
 
-import '/src/actions/get_images.dart';
+import '/src/actions/index.dart';
 import '/src/models/index.dart';
 
 Reducer<AppState> reducer = combineReducers(<Reducer<AppState>>[
