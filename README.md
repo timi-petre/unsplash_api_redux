@@ -2,6 +2,7 @@
 ## Unsplash App from Unsplash API with Redux SM
 
 Author : [@timi-petre ](https://github.com/timi-petre)
+
 **Unsplash APP** project in Flutter.
 
 <details>
